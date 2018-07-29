@@ -12,7 +12,7 @@ const RootStack = createStackNavigator(
     Login: LoginScreen,
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'Register',
     headerLayoutPreset: 'center',
     navigationOptions: {
       headerTransparent: true,
