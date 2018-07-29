@@ -4,29 +4,151 @@ import { Button,
   Text,
   StyleSheet,
   TouchableOpacity,
-  ImageBackground } from 'react-native';
+  Image,
+  ImageBackground,
+  TextInput,
+  KeyboardAvoidingView
+} from 'react-native';
 import { createStackNavigator } from 'react-navigation';
-// import './Landing.css';
+import DatePicker from 'react-native-datepicker';
+import { CognitoUserPool,
+  CognitoUserAttribute,
+  CognitoUser,
+  AuthenticationDetails
+} from 'react-native-aws-cognito-js';
+
 
 class LoginScreen extends React.Component {
   static navigationOptions = {
-    title: 'Login',
+    title: 'Welcome Back!',
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      phone: '+1',
+      email: '',
+      password: '',
+      error: '',
+    };
+    this.focusNextField = this.focusNextField.bind(this);
+    this.inputs = {};
+  }
+
+  focusNextField(id) {
+    this.inputs[id].focus();
+  }
+
+  componentDidMount() {
+    console.log("component did mount");
+
+    this.userPool = new CognitoUserPool({
+      UserPoolId: 'us-east-2_7TRd9WzaF',
+      ClientId: '3cba470tdku3amm3g2bh4us2dr'
+    });
+  }
+
+  signIn() {
+    const authenticationDetails = new AuthenticationDetails({
+      Username: this.state.email,
+      Password: this.state.password
+    });
+    const cognitoUser = new CognitoUser({
+      Username: this.state.email,
+      Pool: this.userPool
+    });
+    cognitoUser.authenticateUser(authenticationDetails, {
+      onSuccess: (result) => {
+        console.log('onSuccess', result)
+        console.log('access token + ' + result.getAccessToken().getJwtToken());
+      },
+      onFailure: (err) => {
+        console.log('onFailure', err)
+      },
+      mfaRequired: (codeDeliveryDetails) => {
+        console.log('mfaRequired', codeDeliveryDetails)
+      }
+    });
+  }
+
   render() {
     return (
       <ImageBackground source={require('../img/Login/Login.png')} style={styles.backgroundImage}>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-end' }}>
-            <TouchableOpacity
-              style={styles.registerButton}
-              onPress={() => {
-                this.props.navigation.navigate('Register');
-              }}
+        <KeyboardAvoidingView behavior="padding" style={{ flex: 10, alignItems: 'center', justifyContent: 'center' }}>
+          <View style={{flexDirection: 'row', width: 330, left: 5}}>
+            <Image
+              source={require('../img/Register/baseline-email-24px.png')}
+              style={{top: 15, marginRight: 7}}
+              />
+            <View style={styles.inputView}>
+              <TextInput
+                autoCorrect= {false}
+                clearTextOnFocus= {true}
+                enablesReturnKeyAutomatically= {true}
+                keyboardType= {'email-address'}
+                placeholder= {'email'}
+                placeholderTextColor= {'#FFFFFF75'}
+                returnKeyType= {'next'}
+                textContentType= {'emailAddress'}
+                underlineColorAndroid= {'transparent'}
+                style={styles.input}
+                onChangeText={(email) => this.setState({email})}
+                onSubmitEditing={() => {
+                  this.focusNextField('password');
+                }}
+                ref={ input => {
+                  this.inputs['email'] = input;
+                }}
+                />
+            </View>
+          </View>
+          <View style={{flexDirection: 'row', width: 330, left: 5}}>
+            <Image
+              source={require('../img/Register/baseline-lock-24px.png')}
+              style={{top: 15, marginRight: 8, marginLeft: 2}}
+              />
+            <View style={styles.inputView}>
+              <TextInput
+                autoCorrect= {false}
+                clearTextOnFocus= {true}
+                enablesReturnKeyAutomatically= {true}
+                keyboardType= {'default'}
+                secureTextEntry= {true}
+                placeholder= {'password'}
+                placeholderTextColor= {'#FFFFFF75'}
+                returnKeyType= {'next'}
+                textContentType= {'password'}
+                underlineColorAndroid= {'transparent'}
+                style={styles.input}
+                onChangeText={(password) => this.setState({password})}
+                ref={ input => {
+                  this.inputs['password'] = input;
+                }}
+                />
+            </View>
+          </View>
+          <Text style={styles.error}>{this.state.error}</Text>
+          <TouchableOpacity
+            style={styles.loginButton}
+            onPress={() => {
+              console.log("Email: " + this.state.email);
+              console.log("Password: " + this.state.password);
+              console.log("Phone: " + this.state.phone);
+              if(this.state.email == ''){
+                this.setState({error: "Email Is Required"});
+              }
+              else if(this.state.password == ''){
+                this.setState({error: "Password Is Required"});
+              }
+              else{
+                this.signIn();
+              }
+            }}
             >
-            <Text style={styles.registerText}>Register</Text>
-            </TouchableOpacity>
-        </View>
+            <Text style={styles.loginText}>Login</Text>
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
       </ImageBackground>
-
     );
   }
 }
@@ -36,8 +158,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  registerButton: {
-    marginBottom: 11,
+  loginButton: {
+    top: 25,
     width: 330,
     height: 43,
     backgroundColor: '#FFFFFF59',
@@ -48,10 +170,29 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 13,
     borderTopRightRadius: 13,
   },
-  registerText: {
+  loginText: {
     fontSize: 20,
     lineHeight: 27,
-    color: '#B69FE4',
+    color: '#59DFA6',
+  },
+  inputView: {
+    borderBottomColor: "#FFFFFF75",
+    borderBottomWidth: 1,
+    paddingTop: 5,
+  },
+  input: {
+    fontSize: 15,
+    width: 242,
+    height: 40,
+    borderBottomColor: '#FFFFFF',
+    color: '#FFFFFF',
+  },
+  error: {
+    top: 5,
+    fontSize: 15,
+    color: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
