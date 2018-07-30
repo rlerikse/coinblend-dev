@@ -3,8 +3,9 @@ import { Button, View, Text } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import HomeScreen from './src/app/components/HomeScreen.js';
 import RegisterScreen from './src/app/components/RegisterScreen.js';
+import RegisterMFA from './src/app/components/RegisterMFA.js';
 import LoginScreen from './src/app/components/LoginScreen.js';
-import MFA from './src/app/components/MFA.js';
+import LoginMFA from './src/app/components/LoginMFA.js';
 import Amplify from 'aws-amplify';
 import aws_exports from './awsmobilejs/#current-backend-info/aws-exports.js';
 
@@ -14,11 +15,12 @@ const RootStack = createStackNavigator(
   {
     Home: HomeScreen,
     Register: RegisterScreen,
+    RegisterMFA: RegisterMFA,
     Login: LoginScreen,
-    MFA: MFA,
+    LoginMFA: LoginMFA,
   },
   {
-    initialRouteName: 'Login',
+    initialRouteName: 'Home',
     headerLayoutPreset: 'center',
     navigationOptions: {
       headerTransparent: true,

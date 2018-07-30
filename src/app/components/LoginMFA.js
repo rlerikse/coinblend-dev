@@ -13,9 +13,9 @@ import { createStackNavigator } from 'react-navigation';
 import DatePicker from 'react-native-datepicker';
 import { Auth } from 'aws-amplify';
 
-class MFA extends React.Component {
+class LoginMFA extends React.Component {
   static navigationOptions = ({ navigation }) => ({
-    title: navigation.state.params.title,
+    title: "Multi-Factor Authentication",
    });
 
   constructor(props) {
@@ -23,7 +23,6 @@ class MFA extends React.Component {
     this.state = {
       authCode: '',
       user: this.props.navigation.state.params.user,
-      prev: this.props.navigation.state.params.prev,
     };
   }
 
@@ -32,26 +31,15 @@ class MFA extends React.Component {
   }
 
   confirmUser() {
-    if(this.state.prev == "Login"){
-      Auth.confirmSignIn(this.state.user, this.state.authCode)
-      .then(res => {
-        console.log('successful confirmation: ', res);
-        this.props.navigation.navigate('Home', { user:res });
-      })
-      .catch(err => {
-        console.log('error confirming user: ', err)
-      })
-    }
-    else if(this.state.prev == "Register"){
-      Auth.confirmSignUp(this.state.user, this.state.authCode)
-      .then(res => {
-        console.log('successful confirmation: ', res);
-        this.props.navigation.navigate('Home', { user:res });
-      })
-      .catch(err => {
-        console.log('error confirming user: ', err)
-      })
-    }
+    Auth.confirmSignIn(this.state.user, this.state.authCode)
+    .then(res => {
+      console.log('successful confirmation: ', res);
+      this.setState({authCode:''});
+      this.props.navigation.navigate('Home', { user:res });
+    })
+    .catch(err => {
+      console.log('error confirming user: ', err)
+    })
   }
 
   render() {
@@ -142,4 +130,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MFA;
+export default LoginMFA;

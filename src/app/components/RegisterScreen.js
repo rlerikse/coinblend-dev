@@ -2,7 +2,6 @@ import React from 'react';
 import { Button,
   View,
   Text,
-  Modal,
   StyleSheet,
   TouchableOpacity,
   TouchableHighlight,
@@ -33,12 +32,6 @@ class RegisterScreen extends React.Component {
       error: '',
       modalVisible: false,
     };
-    this.focusNextField = this.focusNextField.bind(this);
-    this.inputs = {};
-  }
-
-  focusNextField(id) {
-    this.inputs[id].focus();
   }
 
   componentDidMount() {
@@ -61,23 +54,19 @@ class RegisterScreen extends React.Component {
     })
     .then(res => {
       console.log("user successfully created!");
-      this.props.navigation.navigate('MFA', { user:res, title: 'Confirm Registration', prev: 'Register' });
+      this.props.navigation.navigate('RegisterMFA', { user:res, username:this.state.email });
     })
     .catch(err => this.SetState({error: err.message}));
-  }
-
-  setModalVisible(visible) {
-    this.setState({modalVisible: visible});
   }
 
   render() {
     return (
       <ImageBackground source={require('../img/Register/Register.png')} style={styles.backgroundImage}>
-        <KeyboardAvoidingView behavior="padding" style={{ flex: 3, alignItems: 'center', justifyContent: 'flex-end' }}>
+        <KeyboardAvoidingView behavior="padding" style={{ flex: 10, alignItems: 'center', justifyContent: 'flex-end' }}>
           <View style={{flexDirection: 'row', width: 330}}>
             <Image
               source={require('../img/Register/baseline-person-24px.png')}
-              style={{top: 15, marginRight: 11, marginLeft: 1}}
+              style={{top: 15, marginRight: 10, marginLeft: 1}}
               />
             <View style={styles.inputView}>
               <TextInput
@@ -120,7 +109,7 @@ class RegisterScreen extends React.Component {
                   dateInput: {
                     marginLeft: -4,
                     borderColor: '#FFFFFF00',
-                    paddingRight: 139,
+                    paddingRight: 131,
                     backgroundColor: '#FFFFFF00',
                   },
                   dateText: {
@@ -135,7 +124,6 @@ class RegisterScreen extends React.Component {
                 }}
                 onDateChange={(birthdate) => {
                   this.setState({birthdate});
-                  this.focusNextField('phone');
                 }}
                 />
             </View>
@@ -153,19 +141,11 @@ class RegisterScreen extends React.Component {
                 keyboardType= {'phone-pad'}
                 placeholder= {'phone number'}
                 placeholderTextColor= {'#FFFFFF75'}
-                returnKeyType= {'next'}
+                returnKeyType= {'done'}
                 textContentType= {'telephoneNumber'}
                 underlineColorAndroid= {'transparent'}
                 style={styles.input}
                 onChangeText={(phone) => this.setState({phone})}
-                onSubmitEditing={() => {
-                  var formatted = '+1' + this.state.phone;
-                  this.setState({phone: formatted})
-                  this.focusNextField('email');
-                }}
-                ref={ input => {
-                  this.inputs['phone'] = input;
-                }}
                 />
 
             </View>
@@ -183,17 +163,11 @@ class RegisterScreen extends React.Component {
                 keyboardType= {'email-address'}
                 placeholder= {'email'}
                 placeholderTextColor= {'#FFFFFF75'}
-                returnKeyType= {'next'}
+                returnKeyType= {'done'}
                 textContentType= {'emailAddress'}
                 underlineColorAndroid= {'transparent'}
                 style={styles.input}
                 onChangeText={(email) => this.setState({email})}
-                onSubmitEditing={() => {
-                  this.focusNextField('password');
-                }}
-                ref={ input => {
-                  this.inputs['email'] = input;
-                }}
                 />
             </View>
           </View>
@@ -211,17 +185,11 @@ class RegisterScreen extends React.Component {
                 secureTextEntry= {true}
                 placeholder= {'enter password'}
                 placeholderTextColor= {'#FFFFFF75'}
-                returnKeyType= {'next'}
+                returnKeyType= {'done'}
                 textContentType= {'password'}
                 underlineColorAndroid= {'transparent'}
                 style={styles.input}
                 onChangeText={(password) => this.setState({password})}
-                onSubmitEditing={() => {
-                  this.focusNextField('confirm');
-                }}
-                ref={ input => {
-                  this.inputs['password'] = input;
-                }}
                 />
             </View>
           </View>
@@ -239,17 +207,11 @@ class RegisterScreen extends React.Component {
                 secureTextEntry= {true}
                 placeholder= {'confirm password'}
                 placeholderTextColor= {'#FFFFFF75'}
-                returnKeyType= {'next'}
+                returnKeyType= {'done'}
                 textContentType= {'password'}
                 underlineColorAndroid= {'transparent'}
                 style={styles.input}
                 onChangeText={(confirm) => this.setState({confirm})}
-                onSubmitEditing={() => {
-                  this.focusNextField('address');
-                }}
-                ref={ input => {
-                  this.inputs['confirm'] = input;
-                }}
                 />
             </View>
           </View>
@@ -271,16 +233,14 @@ class RegisterScreen extends React.Component {
                 underlineColorAndroid= {'transparent'}
                 style={styles.input}
                 onChangeText={(address) => this.setState({address})}
-                ref={ input => {
-                  this.inputs['address'] = input;
-                }}
                 />
             </View>
           </View>
         </KeyboardAvoidingView>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start' }}>
-          <Text style={styles.error}>{this.state.error}</Text>
-
+        <View style={{ flex: 5, alignItems: 'center', justifyContent: 'flex-start' }}>
+          <View style={{alignItems: 'center'}}>
+            <Text style={styles.error}>{this.state.error}</Text>
+          </View>
           <TouchableOpacity
             style={styles.registerButton}
             onPress={() => {
@@ -326,6 +286,7 @@ class RegisterScreen extends React.Component {
             <Text style={styles.registerText}>Create Account</Text>
           </TouchableOpacity>
         </View>
+        <View style={{flex: 1}}/>
       </ImageBackground>
     );
   }
@@ -337,8 +298,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   registerButton: {
-    position: 'absolute',
-    top: 30,
+    marginTop: 25,
     marginBottom: 11,
     width: 330,
     height: 43,
@@ -373,11 +333,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF00',
   },
   error: {
+    textAlign: 'center',
     marginTop: 5,
     fontSize: 15,
     color: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
 

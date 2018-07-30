@@ -45,7 +45,7 @@ class LoginScreen extends React.Component {
       .then(res => {
         console.log(res);
         if (res.challengeName == "SMS_MFA"){
-          this.props.navigation.navigate('MFA', { user:res, title: 'Multi-Factor Authentication', prev: "Login" });
+          this.props.navigation.navigate('LoginMFA', { user:res });
         }
         else {
           this.props.navigation.navigate('Home');
