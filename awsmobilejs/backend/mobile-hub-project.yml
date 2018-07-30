@@ -6,6 +6,47 @@ features:
       visibility: public-global
     components:
       release: !com.amazonaws.mobilehub.v0.Bucket {}
+  database: !com.amazonaws.mobilehub.v0.Database 
+    components:
+      database-nosql: !com.amazonaws.mobilehub.v0.NoSQLDatabase 
+        tables:
+          - !com.amazonaws.mobilehub.v0.NoSQLTable 
+            attributes:
+              ' accountValue': N
+              ' pinEnabled': BOOL
+              24hrGain: N
+              24hrGainPer: N
+              dependants: S
+              earningsEmailNotification: BOOL
+              earningsPushNotification: BOOL
+              'earningsThreshold ': N
+              employment: S
+              experience: S
+              fingerprintEnabled: BOOL
+              investmentGoal: S
+              investmentSource: S
+              liquid: S
+              liquidityImportance: S
+              maritalStatus: S
+              netWorth: S
+              perception: S
+              pinCode: N
+              riskTolerence: S
+              timeline: S
+              totalGain: N
+              totalGainPer: N
+              totalInvested: N
+              totalWidthdrawn: N
+              transfersEmailNotification: BOOL
+              transfersPushNotification: BOOL
+              userId: S
+              yearlyIncome: S
+            hashKeyName: userId
+            hashKeyType: S
+            rangeKeyName: totalGain
+            rangeKeyType: N
+            tableName: ___DYNAMIC_PREFIX___-coinblend-db
+            tablePrivacy: private
   mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint 
     components:
       analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}
