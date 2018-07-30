@@ -4,12 +4,18 @@ import { createStackNavigator } from 'react-navigation';
 import HomeScreen from './src/app/components/HomeScreen.js';
 import RegisterScreen from './src/app/components/RegisterScreen.js';
 import LoginScreen from './src/app/components/LoginScreen.js';
+import MFA from './src/app/components/MFA.js';
+import Amplify from 'aws-amplify';
+import aws_exports from './awsmobilejs/#current-backend-info/aws-exports.js';
+
+Amplify.configure(aws_exports);
 
 const RootStack = createStackNavigator(
   {
     Home: HomeScreen,
     Register: RegisterScreen,
     Login: LoginScreen,
+    MFA: MFA,
   },
   {
     initialRouteName: 'Login',

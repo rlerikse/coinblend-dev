@@ -11,11 +11,8 @@ import { Button,
 } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import DatePicker from 'react-native-datepicker';
-import { CognitoUserPool,
-  CognitoUserAttribute,
-  CognitoUser,
-  AuthenticationDetails
-} from 'react-native-aws-cognito-js';
+import { Auth } from 'aws-amplify';
+
 
 
 class LoginScreen extends React.Component {
@@ -41,34 +38,20 @@ class LoginScreen extends React.Component {
 
   componentDidMount() {
     console.log("component did mount");
-
-    this.userPool = new CognitoUserPool({
-      UserPoolId: 'us-east-2_7TRd9WzaF',
-      ClientId: '3cba470tdku3amm3g2bh4us2dr'
-    });
   }
 
-  signIn() {
-    const authenticationDetails = new AuthenticationDetails({
-      Username: this.state.email,
-      Password: this.state.password
-    });
-    const cognitoUser = new CognitoUser({
-      Username: this.state.email,
-      Pool: this.userPool
-    });
-    cognitoUser.authenticateUser(authenticationDetails, {
-      onSuccess: (result) => {
-        console.log('onSuccess', result)
-        console.log('access token + ' + result.getAccessToken().getJwtToken());
-      },
-      onFailure: (err) => {
-        console.log('onFailure', err)
-      },
-      mfaRequired: (codeDeliveryDetails) => {
-        console.log('mfaRequired', codeDeliveryDetails)
-      }
-    });
+  signInAmazonCognito(){
+    Auth.signIn(this.state.email, this.state.password)
+      .then(res => {
+        console.log(res);
+        if (res.challengeName == "SMS_MFA"){
+          this.props.navigation.navigate('MFA', { user:res, title: 'Multi-Factor Authentication', prev: "Login" });
+        }
+        else {
+          this.props.navigation.navigate('Home');
+        }
+      })
+      .catch(err => console.log(err));
   }
 
   render() {
@@ -141,7 +124,7 @@ class LoginScreen extends React.Component {
                 this.setState({error: "Password Is Required"});
               }
               else{
-                this.signIn();
+                this.signInAmazonCognito();
               }
             }}
             >

@@ -41,7 +41,6 @@ class HomeScreen extends React.Component {
             </TouchableOpacity>
         </View>
       </ImageBackground>
-
     );
   }
 }

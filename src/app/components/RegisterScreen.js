@@ -2,8 +2,10 @@ import React from 'react';
 import { Button,
   View,
   Text,
+  Modal,
   StyleSheet,
   TouchableOpacity,
+  TouchableHighlight,
   Image,
   ImageBackground,
   TextInput,
@@ -11,12 +13,7 @@ import { Button,
 } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import DatePicker from 'react-native-datepicker';
-import { CognitoUserPool,
-  CognitoUserAttribute,
-  CognitoUser,
-  AuthenticationDetails
-} from 'react-native-aws-cognito-js';
-
+import { Auth } from 'aws-amplify';
 
 class RegisterScreen extends React.Component {
   static navigationOptions = {
@@ -28,12 +25,13 @@ class RegisterScreen extends React.Component {
     this.state = {
       fullname: '',
       birthdate: '',
-      phone: '+1',
+      phone: '',
       email: '',
       password: '',
       confirm: '',
       address: '',
       error: '',
+      modalVisible: false,
     };
     this.focusNextField = this.focusNextField.bind(this);
     this.inputs = {};
@@ -45,79 +43,42 @@ class RegisterScreen extends React.Component {
 
   componentDidMount() {
     console.log("component did mount");
+  }
 
-    this.userPool = new CognitoUserPool({
-      UserPoolId: 'us-east-2_7TRd9WzaF',
-      ClientId: '3cba470tdku3amm3g2bh4us2dr'
-    });
-   }
+  createUserInAmazonCognito() {
+    console.log("Create User called...");
 
-   createUserInAmazonCognito() {
-     console.log("Create User called...")
-     //Fill required atributes
-     const attributeList = [];
-     const attributeName = new CognitoUserAttribute({
-       Name: 'name',
-       Value: this.state.fullname
-     });
-     const attributeBirthdate = new CognitoUserAttribute({
-       Name: 'birthdate',
-       Value: this.state.birthdate
-     });
-     const attributePhone = new CognitoUserAttribute({
-       Name: 'phone_number',
-       Value: this.state.phone
-     });
-     const attributeLocale = new CognitoUserAttribute({
-       Name: 'locale',
-       Value: this.state.address
-     });
-     const attributeAddress = new CognitoUserAttribute({
-       Name: 'address',
-       Value: this.state.address
-     });
-     attributeList.push(attributeName);
-     attributeList.push(attributeBirthdate);
-     attributeList.push(attributePhone);
-     attributeList.push(attributeLocale);
-     attributeList.push(attributeAddress);
-     var cognitoUser;
-     //Call SignUp function
-     this.userPool.signUp(this.state.email, this.state.password,
-     attributeList, null, (err,result) => {
-      if (err) {
-         console.log("Error at signup|" + err + "|");
-         if (err == "InvalidParameterException: Username should be an email."){
-           this.setState({error: "Invalid Email"});
-         }
-         else if (err == "UsernameExistsException: An account with the given email already exists."){
-           this.setState({error: "An Account With The Given Email Already Exists"});
-         }
-         else if (err == "InvalidPasswordException: Password did not conform with policy: Password must have uppercase characters"){
-           this.setState({error: "Password Must Contain an Uppercase and Special Character, as well as a Number"});
-         }
-         else if (err == "InvalidPasswordException: Password did not conform with policy: Password must have numeric characters"){
-           this.setState({error: "Password Must Contain an Uppercase and Special Character, as well as a Number"});
-         }
-         else if (err == "InvalidPasswordException: Password did not conform with policy: Password must have symbol characters"){
-           this.setState({error: "Password Must Contain an Uppercase and Special Character, as well as a Number"});
-         }
-         return;
+    Auth.signUp({
+      username: this.state.email,
+      password: this.state.password,
+      attributes: {
+        name: this.state.fullname,
+        birthdate: this.state.birthdate,
+        phone_number: this.state.phone,
+        locale: this.state.address,
+        address: this.state.address,
       }
-      cognitoUser = result.user;
-      console.log("cognitoUser: ", cognitoUser)
-     });
-   }
+    })
+    .then(res => {
+      console.log("user successfully created!");
+      this.props.navigation.navigate('MFA', { user:res, title: 'Confirm Registration', prev: 'Register' });
+    })
+    .catch(err => this.SetState({error: err.message}));
+  }
+
+  setModalVisible(visible) {
+    this.setState({modalVisible: visible});
+  }
 
   render() {
     return (
       <ImageBackground source={require('../img/Register/Register.png')} style={styles.backgroundImage}>
-        <KeyboardAvoidingView behavior="padding" style={{ flex: 10, alignItems: 'center', justifyContent: 'center' }}>
+        <KeyboardAvoidingView behavior="padding" style={{ flex: 3, alignItems: 'center', justifyContent: 'flex-end' }}>
           <View style={{flexDirection: 'row', width: 330}}>
             <Image
               source={require('../img/Register/baseline-person-24px.png')}
               style={{top: 15, marginRight: 11, marginLeft: 1}}
-            />
+              />
             <View style={styles.inputView}>
               <TextInput
                 autoCorrect= {false}
@@ -131,14 +92,14 @@ class RegisterScreen extends React.Component {
                 underlineColorAndroid= {'transparent'}
                 style={styles.input}
                 onChangeText={(fullname) => this.setState({fullname})}
-              />
+                />
             </View>
           </View>
           <View style={{flexDirection: 'row', width: 330}}>
             <Image
               source={require('../img/Register/baseline-cake-24px.png')}
               style={{top: 11, marginRight: 9}}
-            />
+              />
             <View style={styles.inputView}>
               <DatePicker
                 style={styles.date}
@@ -176,14 +137,14 @@ class RegisterScreen extends React.Component {
                   this.setState({birthdate});
                   this.focusNextField('phone');
                 }}
-              />
+                />
             </View>
           </View>
           <View style={{flexDirection: 'row', width: 330}}>
             <Image
               source={require('../img/Register/baseline-phone-24px.png')}
               style={{top: 15, marginRight: 9}}
-            />
+              />
             <View style={styles.inputView}>
               <TextInput
                 autoCorrect= {false}
@@ -205,7 +166,7 @@ class RegisterScreen extends React.Component {
                 ref={ input => {
                   this.inputs['phone'] = input;
                 }}
-              />
+                />
 
             </View>
           </View>
@@ -213,7 +174,7 @@ class RegisterScreen extends React.Component {
             <Image
               source={require('../img/Register/baseline-email-24px.png')}
               style={{top: 15, marginRight: 7}}
-            />
+              />
             <View style={styles.inputView}>
               <TextInput
                 autoCorrect= {false}
@@ -233,14 +194,14 @@ class RegisterScreen extends React.Component {
                 ref={ input => {
                   this.inputs['email'] = input;
                 }}
-              />
+                />
             </View>
           </View>
           <View style={{flexDirection: 'row', width: 330}}>
             <Image
               source={require('../img/Register/baseline-lock-24px.png')}
               style={{top: 15, marginRight: 8, marginLeft: 2}}
-            />
+              />
             <View style={styles.inputView}>
               <TextInput
                 autoCorrect= {false}
@@ -261,14 +222,14 @@ class RegisterScreen extends React.Component {
                 ref={ input => {
                   this.inputs['password'] = input;
                 }}
-              />
+                />
             </View>
           </View>
           <View style={{flexDirection: 'row', width: 330}}>
             <Image
               source={require('../img/Register/baseline-lock-24px.png')}
               style={{top: 15, marginRight: 8, marginLeft: 2}}
-            />
+              />
             <View style={styles.inputView}>
               <TextInput
                 autoCorrect= {false}
@@ -289,14 +250,14 @@ class RegisterScreen extends React.Component {
                 ref={ input => {
                   this.inputs['confirm'] = input;
                 }}
-              />
+                />
             </View>
           </View>
           <View style={{flexDirection: 'row', width: 330}}>
             <Image
               source={require('../img/Register/baseline-location_city-24px.png')}
               style={{top: 15, marginRight: 7, marginLeft: 2}}
-            />
+              />
             <View style={styles.inputView}>
               <TextInput
                 autoCorrect= {false}
@@ -313,14 +274,13 @@ class RegisterScreen extends React.Component {
                 ref={ input => {
                   this.inputs['address'] = input;
                 }}
-              />
+                />
             </View>
           </View>
         </KeyboardAvoidingView>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start' }}>
           <Text style={styles.error}>{this.state.error}</Text>
-        </View>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-end' }}>
+
           <TouchableOpacity
             style={styles.registerButton}
             onPress={() => {
@@ -341,7 +301,7 @@ class RegisterScreen extends React.Component {
                 this.setState({error: "Phone Number Is Required"});
               }
               else if(this.state.phone.length != 12){
-                this.setState({error: "Invalid Phone Number"});
+                this.setState({error: "Invalid Phone Number, Please Use Format +12345678910"});
               }
               else if(this.state.email == ''){
                 this.setState({error: "Email Is Required"});
@@ -362,8 +322,8 @@ class RegisterScreen extends React.Component {
                 this.createUserInAmazonCognito();
               }
             }}
-          >
-          <Text style={styles.registerText}>Create Account</Text>
+            >
+            <Text style={styles.registerText}>Create Account</Text>
           </TouchableOpacity>
         </View>
       </ImageBackground>
@@ -377,6 +337,8 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   registerButton: {
+    position: 'absolute',
+    top: 30,
     marginBottom: 11,
     width: 330,
     height: 43,
@@ -411,6 +373,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF00',
   },
   error: {
+    marginTop: 5,
     fontSize: 15,
     color: '#FFFFFF',
     alignItems: 'center',
