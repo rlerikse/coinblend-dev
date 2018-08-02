@@ -35,7 +35,7 @@ class RegisterMFA extends React.Component {
     .then(res => {
       console.log('successful confirmation: ', res);
       this.setState({authCode:''});
-      this.props.navigation.navigate('OnB0', { user:res });
+      this.props.navigation.navigate('OnB0');
     })
     .catch(err => {
       console.log('error confirming user: ', err)

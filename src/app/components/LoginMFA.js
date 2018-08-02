@@ -27,8 +27,7 @@ class LoginMFA extends React.Component {
   }
 
   componentDidMount() {
-    console.log("LoginMFA did mount: " + JSON.stringify(Auth.currentUserPoolUser()));
-    console.log("LoginMFA Auth user: " + JSON.stringify(Auth.currentAuthenticatedUser()));
+    console.log("LoginMFA did mount");
   }
 
   confirmUser() {
@@ -36,7 +35,7 @@ class LoginMFA extends React.Component {
     .then(res => {
       console.log('successful confirmation: ', res);
       this.setState({authCode:''});
-      this.props.navigation.navigate('Home', { user:res });
+      this.props.navigation.navigate('Account');
     })
     .catch(err => {
       console.log('error confirming user: ', err)

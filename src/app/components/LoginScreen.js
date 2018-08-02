@@ -30,8 +30,7 @@ class LoginScreen extends React.Component {
   }
 
   componentDidMount() {
-    console.log("Login did mount: " + JSON.stringify(Auth.currentUserPoolUser()));
-    console.log("Login Auth user: " + JSON.stringify(Auth.currentAuthenticatedUser()));
+    console.log("LoginScreen did mount");
   }
 
   signInAmazonCognito(){
@@ -42,7 +41,7 @@ class LoginScreen extends React.Component {
           this.props.navigation.navigate('LoginMFA', { user:res });
         }
         else {
-          this.props.navigation.navigate('Home');
+          this.props.navigation.navigate('Account');
         }
       })
       .catch(err => console.log(err));
@@ -114,17 +113,6 @@ class LoginScreen extends React.Component {
             }}
             >
             <Text style={styles.loginText}>Login</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.loginButton}
-            onPress={() => {
-              Auth.signOut()
-              .then(data => console.log(data))
-              .catch(err => console.log(err));
-              }
-            }
-            >
-            <Text style={styles.loginText}>Logout</Text>
           </TouchableOpacity>
         </KeyboardAvoidingView>
       </ImageBackground>

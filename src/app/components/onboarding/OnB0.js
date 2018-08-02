@@ -17,6 +17,22 @@ import { Auth, API } from 'aws-amplify';
 class OnB0 extends React.Component {
   static navigationOptions = {
     title: 'Risk Analysis',
+    headerLeft: null,
+    headerRight: <TouchableOpacity
+                    onPress={() => {
+                      Auth.signOut()
+                      .then(data => {
+                        console.log("Question skipped!");
+                        this.props.navigation.navigate('OnB1');
+                      })
+                      .catch(err => console.log(err));
+                      }
+                    }}><Text style={{fontSize: 18, lineHeight: 27, color: '#FFFFFF75'}}>skip</Text></TouchableOpacity>,
+    headerRightContainerStyle:{
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginRight: 15,
+    }
   };
 
   constructor(props) {
