@@ -56,10 +56,10 @@ class RegisterMFA extends React.Component {
       autoCorrect= {false}
       clearTextOnFocus= {true}
       enablesReturnKeyAutomatically= {true}
-      keyboardType= {'default'}
+      keyboardType= {'phone-pad'}
       placeholder= {'authentication code'}
       placeholderTextColor= {'#FFFFFF75'}
-      returnKeyType= {'next'}
+      returnKeyType= {'done'}
       textContentType= {'password'}
       underlineColorAndroid= {'transparent'}
       style={styles.input}

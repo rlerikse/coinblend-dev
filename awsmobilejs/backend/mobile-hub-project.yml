@@ -2,6 +2,40 @@
 apps:
   react-native: !com.amazonaws.mobilehub.v0.AppDO {}
 features:
+  cloudlogic: !com.amazonaws.mobilehub.v0.CloudLogic 
+    components:
+      coinblend-db-testCRUD: !com.amazonaws.mobilehub.v0.API 
+        attributes:
+          name: coinblend-db-testCRUD
+          requires-signin: true
+          sdk-generation-stage-name: Development
+        paths:
+          /coinblend-db-test: !com.amazonaws.mobilehub.v0.Function 
+            codeFilename: uploads/coinblenddbtest-20180802142329.zip
+            description: 'Handler for calls to resource path : /coinblend-db-test/{proxy+}'
+            enableCORS: true
+            environment: {}
+            handler: lambda.handler
+            hashcode: SD23HUb/wn8dIBfuAFVI4/jeOoeFzCaWt5t0LdOK4BE=
+            memorySize: '128'
+            modified: '2018-08-02T18:24:32.023+0000'
+            name: coinblenddbtest
+            runtime: nodejs6.10
+            timeout: '3'
+            version: AuM3lDLv19RYIzYroX7Vx.dkjyGLsBb7
+          '/coinblend-db-test/{proxy+}': !com.amazonaws.mobilehub.v0.Function 
+            codeFilename: uploads/coinblenddbtest-20180802142329.zip
+            description: 'Handler for calls to resource path : /coinblend-db-test/{proxy+}'
+            enableCORS: true
+            environment: {}
+            handler: lambda.handler
+            hashcode: SD23HUb/wn8dIBfuAFVI4/jeOoeFzCaWt5t0LdOK4BE=
+            memorySize: '128'
+            modified: '2018-08-02T18:24:32.023+0000'
+            name: coinblenddbtest
+            runtime: nodejs6.10
+            timeout: '3'
+            version: UXRmvJ2PJYKBwuUnMsyeczwRAVnEGaWF
   content-delivery: !com.amazonaws.mobilehub.v0.ContentDelivery 
     attributes:
       enabled: true
@@ -14,40 +48,13 @@ features:
         tables:
           - !com.amazonaws.mobilehub.v0.NoSQLTable 
             attributes:
-              ' accountValue': N
-              ' pinEnabled': BOOL
-              24hrGain: N
-              24hrGainPer: N
-              dependants: S
-              earningsEmailNotification: BOOL
-              earningsPushNotification: BOOL
-              'earningsThreshold ': N
-              employment: S
-              experience: S
-              fingerprintEnabled: BOOL
-              investmentGoal: S
-              investmentSource: S
-              liquid: S
-              liquidityImportance: S
-              maritalStatus: S
-              netWorth: S
-              perception: S
-              pinCode: N
-              riskTolerence: S
-              timeline: S
-              totalGain: N
-              totalGainPer: N
-              totalInvested: N
-              totalWidthdrawn: N
-              transfersEmailNotification: BOOL
-              transfersPushNotification: BOOL
+              accountValue: N
               userId: S
-              yearlyIncome: S
             hashKeyName: userId
             hashKeyType: S
-            rangeKeyName: totalGain
-            rangeKeyType: N
-            tableName: ___DYNAMIC_PREFIX___-coinblend-db
+            rangeKeyName: ''
+            rangeKeyType: ''
+            tableName: ___DYNAMIC_PREFIX___-coinblend-db-test
             tablePrivacy: private
   mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint 
     components:

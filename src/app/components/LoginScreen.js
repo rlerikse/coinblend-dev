@@ -14,7 +14,6 @@ import DatePicker from 'react-native-datepicker';
 import { Auth } from 'aws-amplify';
 
 
-
 class LoginScreen extends React.Component {
   static navigationOptions = {
     title: 'Welcome Back!',
@@ -23,21 +22,16 @@ class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      phone: '+1',
+      phone: '',
       email: '',
       password: '',
       error: '',
     };
-    this.focusNextField = this.focusNextField.bind(this);
-    this.inputs = {};
-  }
-
-  focusNextField(id) {
-    this.inputs[id].focus();
   }
 
   componentDidMount() {
-    console.log("component did mount");
+    console.log("Login did mount: " + JSON.stringify(Auth.currentUserPoolUser()));
+    console.log("Login Auth user: " + JSON.stringify(Auth.currentAuthenticatedUser()));
   }
 
   signInAmazonCognito(){
@@ -71,17 +65,11 @@ class LoginScreen extends React.Component {
                 keyboardType= {'email-address'}
                 placeholder= {'email'}
                 placeholderTextColor= {'#FFFFFF75'}
-                returnKeyType= {'next'}
+                returnKeyType= {'done'}
                 textContentType= {'emailAddress'}
                 underlineColorAndroid= {'transparent'}
                 style={styles.input}
                 onChangeText={(email) => this.setState({email})}
-                onSubmitEditing={() => {
-                  this.focusNextField('password');
-                }}
-                ref={ input => {
-                  this.inputs['email'] = input;
-                }}
                 />
             </View>
           </View>
@@ -104,9 +92,6 @@ class LoginScreen extends React.Component {
                 underlineColorAndroid= {'transparent'}
                 style={styles.input}
                 onChangeText={(password) => this.setState({password})}
-                ref={ input => {
-                  this.inputs['password'] = input;
-                }}
                 />
             </View>
           </View>
@@ -127,6 +112,17 @@ class LoginScreen extends React.Component {
                 this.signInAmazonCognito();
               }
             }}
+            >
+            <Text style={styles.loginText}>Login</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.loginButton}
+            onPress={() => {
+              Auth.signOut()
+              .then(data => console.log(data))
+              .catch(err => console.log(err));
+              }
+            }
             >
             <Text style={styles.loginText}>Login</Text>
           </TouchableOpacity>

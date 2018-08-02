@@ -6,6 +6,7 @@ import { Button,
   TouchableOpacity,
   ImageBackground } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
+import { Auth } from 'aws-amplify';
 var self;
 
 class HomeScreen extends React.Component {
@@ -24,6 +25,11 @@ class HomeScreen extends React.Component {
       marginRight: 15,
     }
   };
+
+  componentDidMount() {
+    let user = Auth.currentAuthenticatedUser();
+  }
+
   render() {
     return (
       <ImageBackground source={require('../img/LandingPage/LandingPage.png')} style={styles.backgroundImage}>

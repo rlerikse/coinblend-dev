@@ -6,7 +6,9 @@ import RegisterScreen from './src/app/components/RegisterScreen.js';
 import RegisterMFA from './src/app/components/RegisterMFA.js';
 import LoginScreen from './src/app/components/LoginScreen.js';
 import LoginMFA from './src/app/components/LoginMFA.js';
-import Amplify from 'aws-amplify';
+import APITest from './src/app/components/APITest.js';
+import Amplify, { Auth } from 'aws-amplify';
+import { withAuthenticator } from 'aws-amplify-react-native';
 import aws_exports from './awsmobilejs/#current-backend-info/aws-exports.js';
 
 Amplify.configure(aws_exports);
@@ -18,9 +20,10 @@ const RootStack = createStackNavigator(
     RegisterMFA: RegisterMFA,
     Login: LoginScreen,
     LoginMFA: LoginMFA,
+    APITest: APITest,
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'APITest',
     headerLayoutPreset: 'center',
     navigationOptions: {
       headerTransparent: true,
