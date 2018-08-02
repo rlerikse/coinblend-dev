@@ -124,7 +124,7 @@ class LoginScreen extends React.Component {
               }
             }
             >
-            <Text style={styles.loginText}>Login</Text>
+            <Text style={styles.loginText}>Logout</Text>
           </TouchableOpacity>
         </KeyboardAvoidingView>
       </ImageBackground>

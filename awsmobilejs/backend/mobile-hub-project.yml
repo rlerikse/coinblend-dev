@@ -11,31 +11,31 @@ features:
           sdk-generation-stage-name: Development
         paths:
           /coinblend-db-test: !com.amazonaws.mobilehub.v0.Function 
-            codeFilename: uploads/coinblenddbtest-20180802142329.zip
+            codeFilename: uploads/coinblenddbtest-20180802154951.zip
             description: 'Handler for calls to resource path : /coinblend-db-test/{proxy+}'
             enableCORS: true
             environment: {}
             handler: lambda.handler
-            hashcode: SD23HUb/wn8dIBfuAFVI4/jeOoeFzCaWt5t0LdOK4BE=
+            hashcode: RsC/7SJ4PBQxpAU0JKO3hmJolmeCWqDh7NCgdRZc6jk=
             memorySize: '128'
-            modified: '2018-08-02T18:24:32.023+0000'
+            modified: '2018-08-02T19:50:12.674+0000'
             name: coinblenddbtest
             runtime: nodejs6.10
             timeout: '3'
-            version: AuM3lDLv19RYIzYroX7Vx.dkjyGLsBb7
+            version: Kjel3ZUO97wYx68Ze57PfNQIR2oZkjUk
           '/coinblend-db-test/{proxy+}': !com.amazonaws.mobilehub.v0.Function 
-            codeFilename: uploads/coinblenddbtest-20180802142329.zip
+            codeFilename: uploads/coinblenddbtest-20180802154951.zip
             description: 'Handler for calls to resource path : /coinblend-db-test/{proxy+}'
             enableCORS: true
             environment: {}
             handler: lambda.handler
-            hashcode: SD23HUb/wn8dIBfuAFVI4/jeOoeFzCaWt5t0LdOK4BE=
+            hashcode: RsC/7SJ4PBQxpAU0JKO3hmJolmeCWqDh7NCgdRZc6jk=
             memorySize: '128'
-            modified: '2018-08-02T18:24:32.023+0000'
+            modified: '2018-08-02T19:50:12.674+0000'
             name: coinblenddbtest
             runtime: nodejs6.10
             timeout: '3'
-            version: UXRmvJ2PJYKBwuUnMsyeczwRAVnEGaWF
+            version: EDLku8SitTTWQZW0JJuLMu2XzhfLVp_J
   content-delivery: !com.amazonaws.mobilehub.v0.ContentDelivery 
     attributes:
       enabled: true
