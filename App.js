@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, View, Text } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
+import Loading from './src/app/components/Loading.js';
 import HomeScreen from './src/app/components/HomeScreen.js';
 import RegisterScreen from './src/app/components/RegisterScreen.js';
 import RegisterMFA from './src/app/components/RegisterMFA.js';
@@ -21,6 +22,7 @@ Amplify.configure(aws_exports);
 
 const RootStack = createStackNavigator(
   {
+    Loading: Loading,
     Home: HomeScreen,
     Register: RegisterScreen,
     RegisterMFA: RegisterMFA,
@@ -35,7 +37,7 @@ const RootStack = createStackNavigator(
     APITest: APITest,
   },
   {
-    initialRouteName: 'Account',
+    initialRouteName: 'OnB0',
     headerLayoutPreset: 'center',
     navigationOptions: {
       headerTransparent: true,

@@ -27,7 +27,7 @@ class OnB0 extends React.Component {
                       })
                       .catch(err => console.log(err));
                       }
-                    }}><Text style={{fontSize: 18, lineHeight: 27, color: '#FFFFFF75'}}>skip</Text></TouchableOpacity>,
+                    }><Text style={{fontSize: 18, lineHeight: 27, color: '#FFFFFF75'}}>skip</Text></TouchableOpacity>,
     headerRightContainerStyle:{
       alignItems: 'center',
       justifyContent: 'center',

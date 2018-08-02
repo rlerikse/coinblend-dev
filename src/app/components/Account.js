@@ -11,6 +11,7 @@ import { Auth } from 'aws-amplify';
 class Account extends React.Component {
   constructor(props){
     super(props);
+    self = this;
   }
   static navigationOptions = {
     headerLeft: null,
@@ -19,11 +20,11 @@ class Account extends React.Component {
                       Auth.signOut()
                       .then(data => {
                         console.log("Logout successful!");
-                        this.props.navigation.navigate('Home');
+                        self.props.navigation.navigate('Home');
                       })
                       .catch(err => console.log(err));
                       }
-                    }}><Text style={{fontSize: 18, lineHeight: 27, color: '#FFFFFF75'}}>Logout</Text></TouchableOpacity>,
+                    }><Text style={{fontSize: 18, lineHeight: 27, color: '#FFFFFF75'}}>Logout</Text></TouchableOpacity>,
     headerRightContainerStyle:{
       alignItems: 'center',
       justifyContent: 'center',
@@ -32,14 +33,14 @@ class Account extends React.Component {
   };
 
   componentDidMount() {
-    let user = Auth.currentAuthenticatedUser();
+    console.log("Account did mount");
   }
 
   render() {
     return (
       <ImageBackground source={require('../img/LandingPage/LandingPage.png')} style={styles.backgroundImage}>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-end' }}>
-          <Text style={styles.introText}>Welcome to CoinBlend!</Text>
+          <Text style={styles.introText}>Account Page</Text>
         </View>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-end' }}>
             <TouchableOpacity

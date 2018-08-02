@@ -27,7 +27,7 @@ class HomeScreen extends React.Component {
   };
 
   componentDidMount() {
-    let user = Auth.currentAuthenticatedUser();
+    console.log("HomeScreen did mount");
   }
 
   render() {

@@ -26,7 +26,7 @@ class OnB4 extends React.Component {
                       })
                       .catch(err => console.log(err));
                       }
-                    }}><Text style={{fontSize: 18, lineHeight: 27, color: '#FFFFFF75'}}>skip</Text></TouchableOpacity>,
+                    }><Text style={{fontSize: 18, lineHeight: 27, color: '#FFFFFF75'}}>skip</Text></TouchableOpacity>,
     headerRightContainerStyle:{
       alignItems: 'center',
       justifyContent: 'center',
@@ -72,7 +72,7 @@ class OnB4 extends React.Component {
     // Use the API module to save the note to the database
     try {
       const apiResponse = await API.put("coinblend-db-testCRUD", path, newAnswer)
-      this.props.navigation.navigate('Home');
+      this.props.navigation.navigate('Account');
     } catch (e) {
       console.log(e);
     }
