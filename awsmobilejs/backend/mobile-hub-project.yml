@@ -49,6 +49,11 @@ features:
           - !com.amazonaws.mobilehub.v0.NoSQLTable 
             attributes:
               accountValue: N
+              risk0: S
+              risk1: S
+              risk2: S
+              risk3: S
+              risk4: S
               userId: S
             hashKeyName: userId
             hashKeyType: S

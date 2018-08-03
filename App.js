@@ -37,7 +37,7 @@ const RootStack = createStackNavigator(
     APITest: APITest,
   },
   {
-    initialRouteName: 'OnB0',
+    initialRouteName: 'Loading',
     headerLayoutPreset: 'center',
     navigationOptions: {
       headerTransparent: true,

@@ -6,14 +6,19 @@ import { Button,
   TouchableOpacity,
   ImageBackground } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
-import { Auth } from 'aws-amplify';
+import { Auth, API } from 'aws-amplify';
 
 class Account extends React.Component {
   constructor(props){
     super(props);
     self = this;
+    this.state = {
+      accountValue: 0.00,
+      apiResponse: null,
+    }
   }
   static navigationOptions = {
+    title: 'Account',
     headerLeft: null,
     headerRight: <TouchableOpacity
                     onPress={() => {
@@ -34,13 +39,26 @@ class Account extends React.Component {
 
   componentDidMount() {
     console.log("Account did mount");
+    this.getData();
+  }
+
+  async getData() {
+    const path = "/coinblend-db-test/object/";
+    try {
+      const apiResponse = await API.get("coinblend-db-testCRUD", path);
+      this.setState({apiResponse:apiResponse, accountValue:apiResponse.accountValue});
+
+      console.log("response from getting note: " + JSON.stringify(apiResponse));
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   render() {
     return (
       <ImageBackground source={require('../img/LandingPage/LandingPage.png')} style={styles.backgroundImage}>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-end' }}>
-          <Text style={styles.introText}>Account Page</Text>
+          <Text style={styles.introText}>${this.state.accountValue}</Text>
         </View>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-end' }}>
             <TouchableOpacity
